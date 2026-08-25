@@ -2,100 +2,41 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>I Am Here, Mi Reina</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
   <style>
     :root {
       --bg-dark: #090a10;
-      --accent-cool: #6c5ce7;
       --accent-warm: #fd79a8;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
-      --card-bg: rgba(22, 25, 41, 0.85);
-      --card-border: rgba(255, 255, 255, 0.1);
-      --font-serif: 'Cormorant Garamond', Georgia, serif;
-      --font-sans: 'Poppins', sans-serif;
+      --card-bg: rgba(22, 25, 41, 0.9);
+      --card-border: rgba(255, 255, 255, 0.15);
     }
 
-    *, *::before, *::after {
+    * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      user-select: none;
     }
 
-    html, body {
-      width: 100%;
-      height: 100%;
+    body {
+      width: 100vw;
+      height: 100vh;
       overflow: hidden;
       background-color: var(--bg-dark);
       color: var(--text-main);
-      font-family: var(--font-sans);
-    }
-
-    #ambient-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    .bg-glow {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 120vw;
-      height: 120vh;
-      transform: translate(-50%, -50%);
-      background: radial-gradient(circle, rgba(108, 92, 231, 0.15) 0%, rgba(9, 10, 16, 0.95) 70%);
-      transition: background 1s ease;
-    }
-
-    body.warm-mode .bg-glow {
-      background: radial-gradient(circle, rgba(253, 121, 168, 0.25) 0%, rgba(19, 15, 28, 0.95) 75%);
-    }
-
-    .rain-drop {
-      position: absolute;
-      width: 1px;
-      height: 18px;
-      background: linear-gradient(transparent, rgba(116, 185, 255, 0.3));
-      animation: fall linear infinite;
-    }
-
-    @keyframes fall {
-      0% { transform: translateY(-20px); opacity: 0; }
-      50% { opacity: 0.5; }
-      100% { transform: translateY(100vh); opacity: 0; }
-    }
-
-    .floating-heart {
-      position: absolute;
-      font-size: 1.2rem;
-      color: var(--accent-warm);
-      pointer-events: none;
-      animation: floatUp 3s ease-out forwards;
-      z-index: 999;
-    }
-
-    @keyframes floatUp {
-      0% { transform: translateY(0) scale(0.6); opacity: 1; }
-      100% { transform: translateY(-80px) scale(1.2); opacity: 0; }
+      font-family: system-ui, -apple-system, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .app-viewport {
       position: relative;
       width: 100%;
+      max-width: 500px;
       height: 100%;
-      z-index: 2;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -105,55 +46,34 @@
     .scene {
       position: absolute;
       width: 100%;
-      max-width: 500px;
-      height: 100%;
-      display: flex;
+      display: none;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.8s ease, visibility 0.8s ease;
     }
 
     .scene.active {
-      opacity: 1;
-      visibility: visible;
+      display: flex;
     }
 
     .glass-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      backdrop-filter: blur(16px);
-      border-radius: 24px;
+      border-radius: 20px;
       padding: 2rem 1.5rem;
       text-align: center;
-      width: 90%;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
-    .serif-title {
-      font-family: var(--font-serif);
-      font-size: 2.2rem;
-      font-weight: 600;
+    h1 {
+      font-size: 2rem;
       margin-bottom: 0.8rem;
     }
 
-    .story-text {
-      font-size: 1.05rem;
-      font-weight: 300;
-      margin-bottom: 0.5rem;
-      text-align: center;
-    }
-
-    .story-text.highlight {
-      color: var(--accent-warm);
-    }
-
-    .subtitle {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      margin-bottom: 1.8rem;
+    p {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      line-height: 1.5;
     }
 
     .badge {
@@ -165,102 +85,47 @@
       margin-bottom: 1rem;
     }
 
-    .character-stage {
-      width: 100%;
-      height: 260px;
-      margin-bottom: 1rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
     }
 
-    .character-stage svg {
-      width: 100%;
-      height: 100%;
-    }
-
-    .hidden-element {
-      display: none !important;
-    }
-
-    .fade-in {
-      animation: fadeIn 0.8s forwards;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .controls {
-      margin-top: 1.2rem;
-      display: flex;
-      justify-content: center;
-      width: 100%;
-    }
-
-    .choice-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-      margin: 1rem 0;
-      width: 100%;
+    .highlight {
+      color: var(--accent-warm);
+      font-weight: 600;
     }
 
     .btn {
-      font-family: var(--font-sans);
-      font-size: 0.95rem;
-      font-weight: 500;
-      padding: 0.85rem 1.8rem;
+      font-size: 1rem;
+      padding: 0.8rem 1.8rem;
       border-radius: 30px;
       border: none;
       cursor: pointer;
-      transition: transform 0.2s ease, background 0.3s ease;
-    }
-
-    .btn-primary {
       background: linear-gradient(135deg, #fd79a8, #6c5ce7);
       color: #fff;
-      box-shadow: 0 8px 20px rgba(253, 121, 168, 0.35);
-    }
-
-    .btn-primary:active {
-      transform: scale(0.98);
+      font-weight: 600;
+      margin-top: 1rem;
+      width: 100%;
     }
 
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.1);
       border: 1px solid var(--card-border);
     }
 
-    .boy-comfort-stroke {
-      animation: comfortPat 2.5s ease-in-out infinite alternate;
-      transform-origin: 75px 95px;
+    .svg-container {
+      width: 100%;
+      height: 220px;
+      margin-bottom: 1rem;
     }
 
-    @keyframes comfortPat {
-      0% { transform: rotate(0deg); }
-      50% { transform: rotate(-3deg); }
-      100% { transform: rotate(2deg); }
-    }
-
-    .final-letter p {
-      font-size: 0.95rem;
-      margin-bottom: 0.6rem;
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
-
-  <div id="ambient-container">
-    <div class="bg-glow"></div>
-    <div id="rain-layer"></div>
-  </div>
-
-  <audio id="bg-music" loop preload="auto">
-    <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
-  </audio>
 
   <main class="app-viewport">
 
@@ -268,243 +133,112 @@
     <section id="scene-0" class="scene active">
       <div class="glass-card">
         <span class="badge">A gentle space for you</span>
-        <h1 class="serif-title">For Mi Reina...</h1>
+        <h1>For Mi Reina...</h1>
         <p class="subtitle">For the moments when everything feels a little too heavy.</p>
-        <button class="btn btn-primary" onclick="startExperience()">Come here... 🎵</button>
+        <button class="btn" onclick="goToScene(1)">Come here...</button>
       </div>
     </section>
 
     <!-- SCENE 1 -->
     <section id="scene-1" class="scene">
-      <div class="character-stage">
-        <svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet">
-          <!-- Bench -->
-          <rect x="250" y="380" width="300" height="12" rx="4" fill="#3a3d52"/>
-          <rect x="280" y="392" width="14" height="60" fill="#292b3a"/>
-          <rect x="506" y="392" width="14" height="60" fill="#292b3a"/>
-
-          <!-- GIRL (Female Features) -->
-          <g id="girl-group" transform="translate(340, 210)">
-            <path d="M 25,35 C 5,60 10,130 20,160 C 40,170 65,170 80,160 C 90,130 95,60 75,35 Z" fill="#2c1d11" />
-            <path d="M 32,95 C 28,120 22,160 22,175 L 78,175 C 78,160 72,120 68,95 Z" fill="#fd79a8" />
-            
-            <g id="girl-arms-slumped">
-              <path d="M 32,100 Q 18,130 35,155" stroke="#e84393" stroke-width="12" stroke-linecap="round" fill="none" />
-              <path d="M 68,100 Q 82,130 65,155" stroke="#e84393" stroke-width="12" stroke-linecap="round" fill="none" />
-            </g>
-
-            <g id="girl-arms-hug" class="hidden-element">
-              <path d="M 32,105 Q 60,115 85,125" stroke="#e84393" stroke-width="12" stroke-linecap="round" fill="none" />
-            </g>
-
-            <rect x="28" y="170" width="18" height="50" rx="8" fill="#383b53"/>
-            <rect x="54" y="170" width="18" height="50" rx="8" fill="#383b53"/>
-
-            <g id="girl-head">
-              <circle cx="50" cy="50" r="30" fill="#ffd3b6" />
-              <path d="M 20,45 Q 50,15 80,45 Q 70,25 50,28 Q 30,25 20,45 Z" fill="#3d2817" />
-              <path id="girl-eyes-sad" d="M 36,52 Q 42,57 46,53 M 54,53 Q 58,57 64,52" stroke="#5c3d2e" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-              <path id="girl-mouth-sad" d="M 44,68 Q 50,64 56,68" stroke="#d67272" stroke-width="2" stroke-linecap="round" fill="none"/>
-              <path id="girl-mouth-smile" d="M 44,65 Q 50,71 56,65" stroke="#d67272" stroke-width="2" stroke-linecap="round" fill="none" class="hidden-element"/>
-            </g>
-          </g>
-
-          <!-- BOY (Male Features) -->
-          <g id="boy-group" transform="translate(100, 210)" opacity="0">
-            <path d="M 22,88 C 18,120 15,165 15,180 L 85,180 C 85,165 82,120 78,88 Z" fill="#2d3436" />
-            <rect x="28" y="175" width="20" height="55" rx="6" fill="#1e272e"/>
-            <rect x="52" y="175" width="20" height="55" rx="6" fill="#1e272e"/>
-
-            <g id="boy-arms-normal">
-              <path d="M 25,95 L 18,150 M 75,95 L 82,150" stroke="#2d3436" stroke-width="15" stroke-linecap="round"/>
-            </g>
-
-            <g id="boy-arms-hug" class="hidden-element boy-comfort-stroke">
-              <path d="M 75,95 Q 115,85 125,125" stroke="#2d3436" stroke-width="16" stroke-linecap="round" fill="none"/>
-              <path d="M 22,95 Q 50,110 85,120" stroke="#2d3436" stroke-width="15" stroke-linecap="round" fill="none"/>
-            </g>
-
-            <g id="boy-head">
-              <circle cx="50" cy="46" r="28" fill="#fbe3b5" />
-              <path d="M 20,46 Q 22,16 50,16 Q 78,16 80,46 Z" fill="#1e1e24" />
-              <circle cx="43" cy="48" r="2.5" fill="#1e1e24"/>
-              <circle cx="61" cy="48" r="2.5" fill="#1e1e24"/>
-              <path d="M 46,60 Q 52,65 58,60" stroke="#b27f64" stroke-width="2" stroke-linecap="round" fill="none"/>
-            </g>
+      <div class="svg-container">
+        <svg viewBox="0 0 400 200" style="width:100%; height:100%;">
+          <rect x="50" y="160" width="300" height="10" fill="#3a3d52"/>
+          <g transform="translate(180, 70)">
+            <circle cx="20" cy="20" r="15" fill="#ffd3b6"/>
+            <path d="M 5,50 C 5,30 35,30 35,50 L 35,90 L 5,90 Z" fill="#fd79a8"/>
           </g>
         </svg>
       </div>
-
       <div class="glass-card">
-        <div class="story-text">Some days are just heavy...</div>
-        <div id="s1-text-2" class="story-text hidden-element">You do not have to explain everything.</div>
-        <div class="controls">
-          <button id="s1-btn" class="btn btn-primary hidden-element" onclick="nextScene(2)">Stay with me</button>
-        </div>
+        <p>Some days are just heavy...</p>
+        <p id="s1-t2" class="hidden">You do not have to explain everything.</p>
+        <button id="s1-b" class="btn hidden" onclick="goToScene(2)">Stay with me</button>
       </div>
     </section>
 
     <!-- SCENE 2 -->
     <section id="scene-2" class="scene">
       <div class="glass-card">
-        <div class="story-text">I know things have been tiring you.</div>
-        <div id="s2-text-2" class="story-text hidden-element">And maybe you have been pretending you're okay.</div>
-        <div class="controls">
-          <button id="s2-btn" class="btn btn-primary hidden-element" onclick="nextScene(3)">I'm here</button>
-        </div>
+        <p>I know things have been tiring you.</p>
+        <p id="s2-t2" class="hidden">And maybe you have been pretending you're okay.</p>
+        <button id="s2-b" class="btn hidden" onclick="goToScene(3)">I'm here</button>
       </div>
     </section>
 
     <!-- SCENE 3 -->
     <section id="scene-3" class="scene">
       <div class="glass-card">
-        <div class="story-text">“You don't have to talk.”</div>
-        <div id="s3-text-2" class="story-text hidden-element">“Can I sit with you?”</div>
-        <div class="controls">
-          <button id="s3-btn" class="btn btn-primary hidden-element" onclick="nextScene(4)">Let him come closer</button>
-        </div>
+        <p>“You don't have to talk.”</p>
+        <p id="s3-t2" class="hidden">“Can I sit with you?”</p>
+        <button id="s3-b" class="btn hidden" onclick="goToScene(4)">Let him come closer</button>
       </div>
     </section>
 
     <!-- SCENE 4 -->
     <section id="scene-4" class="scene">
       <div class="glass-card">
-        <p class="story-text">What would feel best right now?</p>
-        <div id="s4-choices" class="choice-grid">
-          <button class="btn btn-secondary" onclick="makeChoice('Hold her hand')">Hold her hand</button>
-          <button class="btn btn-secondary" onclick="makeChoice('Sit quietly')">Sit quietly</button>
-          <button class="btn btn-secondary" onclick="makeChoice('Give her a hug')">Give her a hug</button>
+        <p>What would feel best right now?</p>
+        <div id="choices">
+          <button class="btn btn-secondary" onclick="choose('Hold her hand')">Hold her hand</button>
+          <button class="btn btn-secondary" onclick="choose('Sit quietly')">Sit quietly</button>
+          <button class="btn btn-secondary" onclick="choose('Give her a hug')">Give her a hug</button>
         </div>
-        <div id="s4-response" class="story-text highlight hidden-element"></div>
-        <div class="controls">
-          <button id="s4-btn" class="btn btn-primary hidden-element" onclick="nextScene(5)">Hold me</button>
-        </div>
+        <p id="choice-res" class="highlight hidden"></p>
+        <button id="s4-b" class="btn hidden" onclick="goToScene(5)">Hold me</button>
       </div>
     </section>
 
-    <!-- SCENE 5 (HUG SCENE) -->
+    <!-- SCENE 5 -->
     <section id="scene-5" class="scene">
       <div class="glass-card">
-        <div class="story-text">You don't have to face every bad moment alone.</div>
-        <div id="s5-text-2" class="story-text highlight serif-title hidden-element">I am here, Mi Reina.</div>
-        <div class="controls">
-          <button id="s5-btn" class="btn btn-primary hidden-element" onclick="nextScene(6)">Read my heart</button>
-        </div>
+        <p>You don't have to face every bad moment alone.</p>
+        <h1 id="s5-t2" class="highlight hidden">I am here, Mi Reina.</h1>
+        <button id="s5-b" class="btn hidden" onclick="goToScene(6)">Read my heart</button>
       </div>
     </section>
 
-    <!-- FINAL CARD -->
+    <!-- SCENE 6 -->
     <section id="scene-6" class="scene">
-      <div class="glass-card final-letter">
+      <div class="glass-card">
         <span class="badge">For My Mi Reina</span>
         <p>I may not be able to take every heavy thing away from you.</p>
         <p>But I can stay, listen, and sit beside you.</p>
-        <p class="story-text highlight">You don't have to face that moment alone.</p>
-        <p class="serif-title" style="margin-top:1rem;">I'm here. Always.</p>
-        <div class="controls">
-          <button class="btn btn-secondary" onclick="nextScene(0)">Start again</button>
-        </div>
+        <p class="highlight">You don't have to face that moment alone.</p>
+        <h1>I'm here. Always.</h1>
+        <button class="btn btn-secondary" onclick="goToScene(0)">Start again</button>
       </div>
     </section>
 
   </main>
 
   <script>
-    // Init Rain
-    const rainContainer = document.getElementById('rain-layer');
-    for (let i = 0; i < 30; i++) {
-      const drop = document.createElement('div');
-      drop.className = 'rain-drop';
-      drop.style.left = `${Math.random() * 100}%`;
-      drop.style.animationDuration = `${0.8 + Math.random() * 0.5}s`;
-      drop.style.animationDelay = `${Math.random() * 2}s`;
-      rainContainer.appendChild(drop);
-    }
-
-    // Click Hearts
-    document.body.addEventListener('click', (e) => {
-      if (e.target.tagName === 'BUTTON') return;
-      const heart = document.createElement('div');
-      heart.className = 'floating-heart';
-      heart.innerHTML = '♥';
-      heart.style.left = `${e.clientX - 10}px`;
-      heart.style.top = `${e.clientY - 10}px`;
-      document.getElementById('ambient-container').appendChild(heart);
-      setTimeout(() => heart.remove(), 3000);
-    });
-
-    function startExperience() {
-      const audio = document.getElementById('bg-music');
-      if (audio) {
-        audio.volume = 0.4;
-        audio.play().catch(() => console.log('Audio autoplay blocked'));
-      }
-      nextScene(1);
-    }
-
-    function nextScene(sceneNumber) {
+    function goToScene(num) {
       document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
-      const target = document.getElementById(`scene-${sceneNumber}`);
-      if (target) target.classList.add('active');
+      document.getElementById('scene-' + num).classList.add('active');
 
-      if (sceneNumber === 1) {
-        setTimeout(() => showEl('s1-text-2'), 1500);
-        setTimeout(() => showEl('s1-btn'), 3000);
-      } else if (sceneNumber === 2) {
-        setTimeout(() => showEl('s2-text-2'), 1500);
-        setTimeout(() => showEl('s2-btn'), 3000);
-      } else if (sceneNumber === 3) {
-        const boy = document.getElementById('boy-group');
-        boy.style.opacity = '1';
-        boy.style.transition = 'all 2s ease';
-        boy.style.transform = 'translate(220px, 210px)';
-
-        setTimeout(() => showEl('s3-text-2'), 1500);
-        setTimeout(() => showEl('s3-btn'), 3000);
-      } else if (sceneNumber === 5) {
-        document.body.classList.add('warm-mode');
-        const boy = document.getElementById('boy-group');
-        boy.style.transform = 'translate(315px, 210px)';
-        
-        document.getElementById('boy-arms-normal').classList.add('hidden-element');
-        document.getElementById('boy-arms-hug').classList.remove('hidden-element');
-        document.getElementById('girl-arms-slumped').classList.add('hidden-element');
-        document.getElementById('girl-arms-hug').classList.remove('hidden-element');
-        document.getElementById('girl-mouth-sad').classList.add('hidden-element');
-        document.getElementById('girl-mouth-smile').classList.remove('hidden-element');
-
-        setTimeout(() => showEl('s5-text-2'), 2000);
-        setTimeout(() => showEl('s5-btn'), 4000);
-      } else if (sceneNumber === 0) {
-        document.body.classList.remove('warm-mode');
-        const boy = document.getElementById('boy-group');
-        boy.style.opacity = '0';
-        boy.style.transform = 'translate(100px, 210px)';
-        document.getElementById('boy-arms-normal').classList.remove('hidden-element');
-        document.getElementById('boy-arms-hug').classList.add('hidden-element');
-        document.getElementById('girl-arms-slumped').classList.remove('hidden-element');
-        document.getElementById('girl-arms-hug').classList.add('hidden-element');
-        document.getElementById('girl-mouth-sad').classList.remove('hidden-element');
-        document.getElementById('girl-mouth-smile').classList.add('hidden-element');
+      if (num === 1) {
+        setTimeout(() => document.getElementById('s1-t2').classList.remove('hidden'), 1000);
+        setTimeout(() => document.getElementById('s1-b').classList.remove('hidden'), 2000);
+      } else if (num === 2) {
+        setTimeout(() => document.getElementById('s2-t2').classList.remove('hidden'), 1000);
+        setTimeout(() => document.getElementById('s2-b').classList.remove('hidden'), 2000);
+      } else if (num === 3) {
+        setTimeout(() => document.getElementById('s3-t2').classList.remove('hidden'), 1000);
+        setTimeout(() => document.getElementById('s3-b').classList.remove('hidden'), 2000);
+      } else if (num === 5) {
+        setTimeout(() => document.getElementById('s5-t2').classList.remove('hidden'), 1000);
+        setTimeout(() => document.getElementById('s5-b').classList.remove('hidden'), 2000);
       }
     }
 
-    function makeChoice(text) {
-      document.getElementById('s4-choices').style.display = 'none';
-      const resp = document.getElementById('s4-response');
-      resp.innerText = `“${text}... I am right here.”`;
-      resp.classList.remove('hidden-element');
-      setTimeout(() => showEl('s4-btn'), 1000);
-    }
-
-    function showEl(id) {
-      const el = document.getElementById(id);
-      if (el) {
-        el.classList.remove('hidden-element');
-        el.classList.add('fade-in');
-      }
+    function choose(txt) {
+      document.getElementById('choices').style.display = 'none';
+      const res = document.getElementById('choice-res');
+      res.innerText = '“' + txt + '... I am right here.”';
+      res.classList.remove('hidden');
+      document.getElementById('s4-b').classList.remove('hidden');
     }
   </script>
 </body>
-                </html>
-  
+</html>
