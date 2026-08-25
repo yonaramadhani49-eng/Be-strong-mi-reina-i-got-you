@@ -1,25 +1,14 @@
-/**
- * I AM HERE, MI REINA - Interactive Story Engine
- * Modular Vanilla JavaScript Implementation
- */
-
 document.addEventListener('DOMContentLoaded', () => {
   initAmbientEnvironment();
   initClickHearts();
 });
 
-/* ==========================================================================
-   STATE MANAGEMENT
-   ========================================================================== */
 const state = {
   currentScene: 0,
   isAnimating: false,
-  girlEmotion: 'sad' // 'sad', 'surprised', 'calm', 'happy'
+  girlEmotion: 'sad'
 };
 
-/* ==========================================================================
-   AMBIENT PARTICLES & RAIN SYSTEM
-   ========================================================================== */
 function initAmbientEnvironment() {
   const rainContainer = document.getElementById('rain-layer');
   const dropCount = 35;
@@ -36,7 +25,6 @@ function initAmbientEnvironment() {
 
 function initClickHearts() {
   document.body.addEventListener('click', (e) => {
-    // Prevent heart spawns on direct button clicks to avoid clutter
     if (e.target.tagName === 'BUTTON') return;
 
     const heart = document.createElement('div');
@@ -53,10 +41,15 @@ function initClickHearts() {
   });
 }
 
-/* ==========================================================================
-   SCENE NAVIGATION & FLOW
-   ========================================================================== */
 function startExperience() {
+  // Start Comforting Music Stream
+  const audio = document.getElementById('bg-music');
+  if (audio) {
+    audio.volume = 0.4;
+    audio.play().catch(() => {
+      console.log("Audio playback required user gesture.");
+    });
+  }
   goToScene(1);
 }
 
@@ -64,11 +57,9 @@ function goToScene(sceneNumber) {
   if (state.isAnimating) return;
   state.isAnimating = true;
 
-  // Deactivate all scenes
   const scenes = document.querySelectorAll('.scene');
   scenes.forEach(scene => scene.classList.remove('active'));
 
-  // Activate target scene
   const targetScene = document.getElementById(`scene-${sceneNumber}`);
   if (targetScene) {
     targetScene.classList.add('active');
@@ -76,7 +67,6 @@ function goToScene(sceneNumber) {
 
   state.currentScene = sceneNumber;
 
-  // Execute Scene Specific Logic
   setTimeout(() => {
     handleSceneInit(sceneNumber);
     state.isAnimating = false;
@@ -106,11 +96,6 @@ function handleSceneInit(sceneNumber) {
   }
 }
 
-/* ==========================================================================
-   SCENE SPECIFIC LOGIC
-   ========================================================================== */
-
-// SCENE 1
 function setupScene1() {
   triggerTearAnimation();
   
@@ -123,7 +108,6 @@ function setupScene1() {
   }, 4500);
 }
 
-// SCENE 2
 function setupScene2() {
   spawnThoughtTags();
 
@@ -138,7 +122,7 @@ function setupScene2() {
 
 function spawnThoughtTags() {
   const container = document.getElementById('thoughts-container');
-  container.innerHTML = ''; // Clear previous
+  container.innerHTML = '';
 
   const thoughts = [
     "Too much to think about...",
@@ -159,13 +143,11 @@ function spawnThoughtTags() {
   });
 }
 
-// SCENE 3
 function setupScene3() {
-  // Animate Boy Approaching in Background
   const boy = document.getElementById('boy-group');
   boy.style.opacity = '1';
   boy.style.transition = 'transform 3s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.5s ease';
-  boy.style.transform = 'translate(220px, 210px)'; // Walk closer
+  boy.style.transform = 'translate(220px, 210px)';
 
   setTimeout(() => {
     showElement('s3-text-1');
@@ -180,16 +162,13 @@ function setupScene3() {
   }, 5500);
 }
 
-// SCENE 4
 function setupScene4() {
-  // Boy Sits Down Beside Her
   const boy = document.getElementById('boy-group');
   boy.style.transform = 'translate(270px, 210px)';
   
   document.getElementById('boy-legs-walk').classList.add('hidden-element');
   document.getElementById('boy-legs-sit').classList.remove('hidden-element');
 
-  // Change Girl Emotion to Noticing
   setGirlEmotion('surprised');
 
   const dialogueContainer = document.getElementById('s4-dialogue');
@@ -219,7 +198,6 @@ function setupScene4() {
   }, lines.length * 2200 + 800);
 }
 
-// SCENE 5
 function setupScene5() {
   setGirlEmotion('calm');
 }
@@ -244,7 +222,6 @@ function makeChoice(type) {
   }, 1500);
 }
 
-// SCENE 6 - HUG EMBRACE
 function setupScene6() {
   startHugAnimation();
 
@@ -268,12 +245,10 @@ function setupScene6() {
 function startHugAnimation() {
   document.body.classList.add('warm-mode');
 
-  // Move Boy into Full Embrace
   const boy = document.getElementById('boy-group');
   boy.style.transition = 'transform 2s ease';
   boy.style.transform = 'translate(315px, 210px)';
 
-  // Switch Arm Visuals to Hugging
   document.getElementById('boy-arms-normal').classList.add('hidden-element');
   document.getElementById('boy-arms-hug').classList.remove('hidden-element');
 
@@ -282,7 +257,6 @@ function startHugAnimation() {
 
   setGirlEmotion('happy');
 
-  // Reduce Rain Intensity
   const rain = document.getElementById('rain-layer');
   rain.style.opacity = '0.2';
 }
@@ -294,9 +268,6 @@ function showPersonalCard() {
   document.getElementById('personal-card').classList.add('active');
 }
 
-/* ==========================================================================
-   CHARACTER ANIMATION HELPERS
-   ========================================================================== */
 function setGirlEmotion(emotion) {
   state.girlEmotion = emotion;
   const eyesSad = document.getElementById('girl-eyes-sad');
@@ -313,7 +284,6 @@ function setGirlEmotion(emotion) {
     mouthSad.classList.add('hidden-element');
     mouthSmile.classList.remove('hidden-element');
   } else {
-    // Sad default
     eyesSad.classList.remove('hidden-element');
     eyesOpen.classList.add('hidden-element');
     mouthSad.classList.remove('hidden-element');
@@ -335,9 +305,6 @@ function triggerTearAnimation() {
   }, 100);
 }
 
-/* ==========================================================================
-   UTILITY HELPERS
-   ========================================================================== */
 function showElement(id) {
   const el = document.getElementById(id);
   if (el) {
@@ -347,11 +314,9 @@ function showElement(id) {
 }
 
 function resetExperience() {
-  // Reset Theme
   document.body.classList.remove('warm-mode');
   document.getElementById('rain-layer').style.opacity = '1';
 
-  // Reset Characters
   const boy = document.getElementById('boy-group');
   boy.style.opacity = '0';
   boy.style.transform = 'translate(100px, 210px)';
@@ -366,14 +331,12 @@ function resetExperience() {
 
   setGirlEmotion('sad');
 
-  // Reset Thoughts Container
   document.getElementById('thoughts-container').innerHTML = '';
 
-  // Return to Scene 0 (Start Screen)
   const scenes = document.querySelectorAll('.scene');
   scenes.forEach(scene => scene.classList.remove('active'));
 
   document.getElementById('start-screen').classList.add('active');
   state.currentScene = 0;
-        }
-  
+  }
+    
