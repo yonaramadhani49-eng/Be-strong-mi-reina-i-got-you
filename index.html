@@ -7,6 +7,7 @@
   <style>
     :root {
       --bg-dark: #090a10;
+      --accent-cool: #6c5ce7;
       --accent-warm: #fd79a8;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
@@ -18,6 +19,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      user-select: none;
     }
 
     body {
@@ -26,10 +28,49 @@
       overflow: hidden;
       background-color: var(--bg-dark);
       color: var(--text-main);
-      font-family: system-ui, -apple-system, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
+    }
+
+    #ambient-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .bg-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 120vw;
+      height: 120vh;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(108, 92, 231, 0.2) 0%, rgba(9, 10, 16, 0.98) 70%);
+      transition: background 1.5s ease;
+    }
+
+    body.warm-mode .bg-glow {
+      background: radial-gradient(circle, rgba(253, 121, 168, 0.3) 0%, rgba(19, 15, 28, 0.98) 75%);
+    }
+
+    .rain-drop {
+      position: absolute;
+      width: 1.5px;
+      height: 20px;
+      background: linear-gradient(transparent, rgba(116, 185, 255, 0.4));
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-30px); opacity: 0; }
+      50% { opacity: 0.6; }
+      100% { transform: translateY(100vh); opacity: 0; }
     }
 
     .app-viewport {
@@ -37,6 +78,7 @@
       width: 100%;
       max-width: 500px;
       height: 100%;
+      z-index: 2;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -49,30 +91,35 @@
       display: none;
       flex-direction: column;
       align-items: center;
+      opacity: 0;
+      transition: opacity 0.8s ease;
     }
 
     .scene.active {
       display: flex;
+      opacity: 1;
     }
 
     .glass-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 20px;
+      backdrop-filter: blur(12px);
+      border-radius: 24px;
       padding: 2rem 1.5rem;
       text-align: center;
       width: 100%;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
     }
 
     h1 {
       font-size: 2rem;
+      font-weight: 600;
       margin-bottom: 0.8rem;
     }
 
     p {
-      font-size: 1rem;
-      margin-bottom: 1rem;
+      font-size: 1.05rem;
+      margin-bottom: 0.8rem;
       line-height: 1.5;
     }
 
@@ -87,7 +134,7 @@
 
     .subtitle {
       color: var(--text-muted);
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       margin-bottom: 1.5rem;
     }
 
@@ -96,36 +143,98 @@
       font-weight: 600;
     }
 
+    .controls {
+      margin-top: 1rem;
+      width: 100%;
+    }
+
+    .choice-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin: 1rem 0;
+      width: 100%;
+    }
+
     .btn {
       font-size: 1rem;
-      padding: 0.8rem 1.8rem;
+      font-weight: 600;
+      padding: 0.85rem 1.8rem;
       border-radius: 30px;
       border: none;
       cursor: pointer;
       background: linear-gradient(135deg, #fd79a8, #6c5ce7);
       color: #fff;
-      font-weight: 600;
-      margin-top: 1rem;
+      transition: transform 0.2s ease, opacity 0.3s ease;
       width: 100%;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
     }
 
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
       border: 1px solid var(--card-border);
     }
 
-    .svg-container {
+    .svg-stage {
       width: 100%;
-      height: 220px;
+      height: 240px;
       margin-bottom: 1rem;
     }
 
+    .svg-stage svg {
+      width: 100%;
+      height: 100%;
+    }
+
     .hidden {
-      display: none;
+      display: none !important;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.8s forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Animation States */
+    #boy-group {
+      transition: transform 1.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.5s ease;
+    }
+
+    .breathing-girl {
+      animation: breathe 3s ease-in-out infinite alternate;
+      transform-origin: center bottom;
+    }
+
+    @keyframes breathe {
+      0% { transform: translateY(0px) scaleY(1); }
+      100% { transform: translateY(-2px) scaleY(1.01); }
+    }
+
+    .hug-arm-animation {
+      animation: armPat 2s ease-in-out infinite alternate;
+      transform-origin: 75px 95px;
+    }
+
+    @keyframes armPat {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(-4deg); }
     }
   </style>
 </head>
 <body>
+
+  <div id="ambient-container">
+    <div class="bg-glow"></div>
+    <div id="rain-layer"></div>
+  </div>
 
   <main class="app-viewport">
 
@@ -141,19 +250,71 @@
 
     <!-- SCENE 1 -->
     <section id="scene-1" class="scene">
-      <div class="svg-container">
-        <svg viewBox="0 0 400 200" style="width:100%; height:100%;">
-          <rect x="50" y="160" width="300" height="10" fill="#3a3d52"/>
-          <g transform="translate(180, 70)">
-            <circle cx="20" cy="20" r="15" fill="#ffd3b6"/>
-            <path d="M 5,50 C 5,30 35,30 35,50 L 35,90 L 5,90 Z" fill="#fd79a8"/>
+      <div class="svg-stage">
+        <svg viewBox="0 0 500 300">
+          <!-- Bench -->
+          <rect x="100" y="240" width="300" height="10" rx="3" fill="#3a3d52"/>
+          <rect x="130" y="250" width="12" height="40" fill="#292b3a"/>
+          <rect x="358" y="250" width="12" height="40" fill="#292b3a"/>
+
+          <!-- Girl Character -->
+          <g id="girl-group" class="breathing-girl" transform="translate(260, 90)">
+            <path d="M 15,25 C -2,45 2,100 10,125 C 25,135 45,135 60,125 C 68,100 72,45 55,25 Z" fill="#2c1d11" />
+            <path d="M 22,70 C 18,90 14,120 14,135 L 56,135 C 56,120 52,90 48,70 Z" fill="#fd79a8" />
+            
+            <g id="girl-arms-slumped">
+              <path d="M 22,75 Q 10,100 25,120" stroke="#e84393" stroke-width="9" stroke-linecap="round" fill="none" />
+              <path d="M 48,75 Q 60,100 45,120" stroke="#e84393" stroke-width="9" stroke-linecap="round" fill="none" />
+            </g>
+
+            <g id="girl-arms-hug" class="hidden">
+              <path d="M 22,80 Q 45,90 65,95" stroke="#e84393" stroke-width="9" stroke-linecap="round" fill="none" />
+            </g>
+
+            <rect x="20" y="135" width="12" height="45" rx="5" fill="#383b53"/>
+            <rect x="38" y="135" width="12" height="45" rx="5" fill="#383b53"/>
+
+            <g id="girl-head">
+              <circle cx="35" cy="38" r="22" fill="#ffd3b6" />
+              <path d="M 13,35 Q 35,12 57,35 Q 50,20 35,22 Q 20,20 13,35 Z" fill="#3d2817" />
+              <path id="girl-eyes-sad" d="M 25,40 Q 29,44 32,41 M 38,41 Q 41,44 45,40" stroke="#5c3d2e" stroke-width="2" stroke-linecap="round" fill="none"/>
+              <path id="girl-mouth-sad" d="M 30,52 Q 35,49 40,52" stroke="#d67272" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+              <path id="girl-mouth-smile" d="M 30,50 Q 35,55 40,50" stroke="#d67272" stroke-width="1.8" stroke-linecap="round" fill="none" class="hidden"/>
+            </g>
+          </g>
+
+          <!-- Boy Character -->
+          <g id="boy-group" transform="translate(60, 90)" opacity="0">
+            <path d="M 16,65 C 13,90 10,125 10,135 L 60,135 C 60,125 57,90 54,65 Z" fill="#2d3436" />
+            <rect x="20" y="135" width="14" height="45" rx="4" fill="#1e272e"/>
+            <rect x="36" y="135" width="14" height="45" rx="4" fill="#1e272e"/>
+
+            <g id="boy-arms-normal">
+              <path d="M 18,70 L 12,115 M 52,70 L 58,115" stroke="#2d3436" stroke-width="11" stroke-linecap="round"/>
+            </g>
+
+            <g id="boy-arms-hug" class="hidden hug-arm-animation">
+              <path d="M 52,70 Q 85,60 95,95" stroke="#2d3436" stroke-width="12" stroke-linecap="round" fill="none"/>
+              <path d="M 16,70 Q 35,80 60,90" stroke="#2d3436" stroke-width="11" stroke-linecap="round" fill="none"/>
+            </g>
+
+            <g id="boy-head">
+              <circle cx="35" cy="35" r="20" fill="#fbe3b5" />
+              <path d="M 14,35 Q 15,12 35,12 Q 55,12 56,35 Z" fill="#1e1e24" />
+              <circle cx="30" cy="37" r="2" fill="#1e1e24"/>
+              <circle cx="43" cy="37" r="2" fill="#1e1e24"/>
+              <path d="M 32,46 Q 36,50 40,46" stroke="#b27f64" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            </g>
           </g>
         </svg>
       </div>
+
       <div class="glass-card">
         <p>Some days are just heavy...</p>
         <p id="s1-t2" class="hidden">You do not have to explain everything.</p>
-        <button id="s1-b" class="btn hidden" onclick="goToScene(2)">Stay with me</button>
+        <div class="controls">
+          <button id="s1-b" class="btn hidden" onclick="goToScene(2)">Stay with me</button>
+        </div>
       </div>
     </section>
 
@@ -162,7 +323,9 @@
       <div class="glass-card">
         <p>I know things have been tiring you.</p>
         <p id="s2-t2" class="hidden">And maybe you have been pretending you're okay.</p>
-        <button id="s2-b" class="btn hidden" onclick="goToScene(3)">I'm here</button>
+        <div class="controls">
+          <button id="s2-b" class="btn hidden" onclick="goToScene(3)">I'm here</button>
+        </div>
       </div>
     </section>
 
@@ -171,7 +334,9 @@
       <div class="glass-card">
         <p>“You don't have to talk.”</p>
         <p id="s3-t2" class="hidden">“Can I sit with you?”</p>
-        <button id="s3-b" class="btn hidden" onclick="goToScene(4)">Let him come closer</button>
+        <div class="controls">
+          <button id="s3-b" class="btn hidden" onclick="goToScene(4)">Let him come closer</button>
+        </div>
       </div>
     </section>
 
@@ -179,13 +344,15 @@
     <section id="scene-4" class="scene">
       <div class="glass-card">
         <p>What would feel best right now?</p>
-        <div id="choices">
+        <div id="choices" class="choice-grid">
           <button class="btn btn-secondary" onclick="choose('Hold her hand')">Hold her hand</button>
           <button class="btn btn-secondary" onclick="choose('Sit quietly')">Sit quietly</button>
           <button class="btn btn-secondary" onclick="choose('Give her a hug')">Give her a hug</button>
         </div>
         <p id="choice-res" class="highlight hidden"></p>
-        <button id="s4-b" class="btn hidden" onclick="goToScene(5)">Hold me</button>
+        <div class="controls">
+          <button id="s4-b" class="btn hidden" onclick="goToScene(5)">Hold me</button>
+        </div>
       </div>
     </section>
 
@@ -194,7 +361,9 @@
       <div class="glass-card">
         <p>You don't have to face every bad moment alone.</p>
         <h1 id="s5-t2" class="highlight hidden">I am here, Mi Reina.</h1>
-        <button id="s5-b" class="btn hidden" onclick="goToScene(6)">Read my heart</button>
+        <div class="controls">
+          <button id="s5-b" class="btn hidden" onclick="goToScene(6)">Read my heart</button>
+        </div>
       </div>
     </section>
 
@@ -206,29 +375,69 @@
         <p>But I can stay, listen, and sit beside you.</p>
         <p class="highlight">You don't have to face that moment alone.</p>
         <h1>I'm here. Always.</h1>
-        <button class="btn btn-secondary" onclick="goToScene(0)">Start again</button>
+        <div class="controls">
+          <button class="btn btn-secondary" onclick="goToScene(0)">Start again</button>
+        </div>
       </div>
     </section>
 
   </main>
 
   <script>
+    // Rain initialization
+    const rainContainer = document.getElementById('rain-layer');
+    for (let i = 0; i < 35; i++) {
+      const drop = document.createElement('div');
+      drop.className = 'rain-drop';
+      drop.style.left = `${Math.random() * 100}%`;
+      drop.style.animationDuration = `${0.7 + Math.random() * 0.5}s`;
+      drop.style.animationDelay = `${Math.random() * 2}s`;
+      rainContainer.appendChild(drop);
+    }
+
     function goToScene(num) {
       document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
-      document.getElementById('scene-' + num).classList.add('active');
+      const activeScene = document.getElementById('scene-' + num);
+      activeScene.classList.add('active');
 
       if (num === 1) {
-        setTimeout(() => document.getElementById('s1-t2').classList.remove('hidden'), 1000);
-        setTimeout(() => document.getElementById('s1-b').classList.remove('hidden'), 2000);
+        setTimeout(() => showEl('s1-t2'), 1200);
+        setTimeout(() => showEl('s1-b'), 2400);
       } else if (num === 2) {
-        setTimeout(() => document.getElementById('s2-t2').classList.remove('hidden'), 1000);
-        setTimeout(() => document.getElementById('s2-b').classList.remove('hidden'), 2000);
+        setTimeout(() => showEl('s2-t2'), 1200);
+        setTimeout(() => showEl('s2-b'), 2400);
       } else if (num === 3) {
-        setTimeout(() => document.getElementById('s3-t2').classList.remove('hidden'), 1000);
-        setTimeout(() => document.getElementById('s3-b').classList.remove('hidden'), 2000);
+        const boy = document.getElementById('boy-group');
+        boy.style.opacity = '1';
+        boy.style.transform = 'translate(180px, 90px)';
+
+        setTimeout(() => showEl('s3-t2'), 1200);
+        setTimeout(() => showEl('s3-b'), 2400);
       } else if (num === 5) {
-        setTimeout(() => document.getElementById('s5-t2').classList.remove('hidden'), 1000);
-        setTimeout(() => document.getElementById('s5-b').classList.remove('hidden'), 2000);
+        document.body.classList.add('warm-mode');
+        const boy = document.getElementById('boy-group');
+        boy.style.transform = 'translate(242px, 90px)';
+        
+        document.getElementById('boy-arms-normal').classList.add('hidden');
+        document.getElementById('boy-arms-hug').classList.remove('hidden');
+        document.getElementById('girl-arms-slumped').classList.add('hidden');
+        document.getElementById('girl-arms-hug').classList.remove('hidden');
+        document.getElementById('girl-mouth-sad').classList.add('hidden');
+        document.getElementById('girl-mouth-smile').classList.remove('hidden');
+
+        setTimeout(() => showEl('s5-t2'), 1500);
+        setTimeout(() => showEl('s5-b'), 3000);
+      } else if (num === 0) {
+        document.body.classList.remove('warm-mode');
+        const boy = document.getElementById('boy-group');
+        boy.style.opacity = '0';
+        boy.style.transform = 'translate(60px, 90px)';
+        document.getElementById('boy-arms-normal').classList.remove('hidden');
+        document.getElementById('boy-arms-hug').classList.add('hidden');
+        document.getElementById('girl-arms-slumped').classList.remove('hidden');
+        document.getElementById('girl-arms-hug').classList.add('hidden');
+        document.getElementById('girl-mouth-sad').classList.remove('hidden');
+        document.getElementById('girl-mouth-smile').classList.add('hidden');
       }
     }
 
@@ -237,8 +446,18 @@
       const res = document.getElementById('choice-res');
       res.innerText = '“' + txt + '... I am right here.”';
       res.classList.remove('hidden');
-      document.getElementById('s4-b').classList.remove('hidden');
+      res.classList.add('fade-in');
+      showEl('s4-b');
+    }
+
+    function showEl(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.remove('hidden');
+        el.classList.add('fade-in');
+      }
     }
   </script>
 </body>
-</html>
+              </html>
+  
