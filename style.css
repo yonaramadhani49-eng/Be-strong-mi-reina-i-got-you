@@ -1,0 +1,451 @@
+/* ==========================================================================
+   RESET & SYSTEM VARIABLES
+   ========================================================================== */
+:root {
+  /* Color Palette - Atmosphere progression */
+  --bg-dark: #090a10;
+  --bg-muted: #131521;
+  --accent-cool: #6c5ce7;
+  --accent-warm: #fd79a8;
+  --accent-glow: rgba(253, 121, 168, 0.25);
+  
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-highlight: #ff7675;
+
+  --card-bg: rgba(22, 25, 41, 0.75);
+  --card-border: rgba(255, 255, 255, 0.08);
+
+  /* Fonts */
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Transitions */
+  --transition-speed: 0.8s;
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   BACKGROUND & AMBIENT EFFECTS
+   ========================================================================== */
+#ambient-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+  transition: background var(--transition-speed) ease;
+}
+
+.bg-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120vw;
+  height: 120vh;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(108, 92, 231, 0.15) 0%, rgba(9, 10, 16, 0.9) 70%);
+  transition: background var(--transition-speed) ease;
+}
+
+/* Warm atmosphere modifier */
+body.warm-mode .bg-glow {
+  background: radial-gradient(circle, rgba(253, 121, 168, 0.2) 0%, rgba(19, 15, 28, 0.95) 75%);
+}
+
+#particles-layer, #rain-layer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.rain-drop {
+  position: absolute;
+  width: 1px;
+  height: 18px;
+  background: linear-gradient(transparent, rgba(116, 185, 255, 0.3));
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  0% { transform: translateY(-20px); opacity: 0; }
+  50% { opacity: 0.5; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+.floating-heart {
+  position: absolute;
+  font-size: 1.2rem;
+  color: var(--accent-warm);
+  pointer-events: none;
+  animation: floatUpAndFade 3s var(--ease-cinematic) forwards;
+  z-index: 999;
+}
+
+@keyframes floatUpAndFade {
+  0% { transform: translateY(0) scale(0.6); opacity: 1; }
+  100% { transform: translateY(-80px) scale(1.2); opacity: 0; }
+}
+
+/* ==========================================================================
+   LAYOUT & VIEWPORT
+   ========================================================================== */
+.app-viewport {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+/* Scene Container System */
+.scene {
+  position: absolute;
+  width: 100%;
+  max-width: 600px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 1rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(15px) scale(0.98);
+  transition: opacity var(--transition-speed) var(--ease-cinematic),
+              transform var(--transition-speed) var(--ease-cinematic),
+              visibility var(--transition-speed);
+}
+
+.scene.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+/* ==========================================================================
+   SVG CHARACTER STAGE
+   ========================================================================== */
+.character-stage {
+  position: absolute;
+  top: 10%;
+  width: 100%;
+  max-width: 500px;
+  height: 55%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.svg-container {
+  width: 100%;
+  height: 100%;
+}
+
+.svg-container svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* SVG Animations */
+.breath-animation {
+  animation: breath 4s ease-in-out infinite alternate;
+  transform-origin: center bottom;
+}
+
+@keyframes breath {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-3px); }
+}
+
+.hidden-element {
+  display: none !important;
+  opacity: 0;
+}
+
+/* ==========================================================================
+   TEXT CARDS & UI COMPONENTS
+   ========================================================================== */
+.content-box {
+  position: absolute;
+  bottom: 5%;
+  width: 90%;
+  max-width: 480px;
+  text-align: center;
+  z-index: 10;
+  padding: 1.5rem;
+}
+
+.glass-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 24px;
+  padding: 2.2rem 1.8rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.elevated {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+/* Typography Styles */
+.serif-title {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 0.8rem;
+  line-height: 1.2;
+}
+
+.story-text {
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+  transition: opacity 0.6s ease;
+}
+
+.story-text.highlight {
+  color: var(--text-highlight);
+  font-weight: 400;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 1.8rem;
+  font-weight: 300;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent-warm);
+  margin-bottom: 1rem;
+}
+
+/* Speech Bubbles */
+.speech-bubble {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.6rem 1.2rem;
+  border-radius: 18px;
+  font-size: 0.95rem;
+  margin-bottom: 0.8rem;
+}
+
+/* Floating Problem Tag Bubbles */
+#thoughts-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.thought-tag {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  padding: 0.4rem 0.9rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  animation: floatTag 6s ease-in-out infinite alternate;
+}
+
+@keyframes floatTag {
+  0% { transform: translateY(0) scale(0.95); opacity: 0.3; }
+  100% { transform: translateY(-15px) scale(1); opacity: 0.8; }
+}
+
+/* Dialogue Flow */
+.dialogue-flow {
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.dialogue-line {
+  font-size: 1rem;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.dialogue-line.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dialogue-line.boy { color: #a29bfe; }
+.dialogue-line.girl { color: #ffeaa7; }
+
+/* Buttons & Controls */
+.controls {
+  margin-top: 1.2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.choice-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 1rem 0;
+}
+
+.btn {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.85rem 2rem;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s var(--ease-cinematic);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(108, 92, 231, 0.35);
+}
+
+.btn-primary:hover, .btn-primary:active {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(108, 92, 231, 0.5);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-main);
+  border: 1px solid var(--card-border);
+}
+
+.btn-secondary:hover, .btn-secondary:active {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--card-border);
+}
+
+/* ==========================================================================
+   FINAL CARD STYLING
+   ========================================================================== */
+.final-letter {
+  max-width: 440px;
+  padding: 2.5rem 2rem;
+}
+
+.final-letter p {
+  font-size: 0.98rem;
+  font-weight: 300;
+  margin-bottom: 0.8rem;
+  color: #e2e8f0;
+}
+
+.final-letter .emphasis {
+  color: var(--accent-warm);
+  font-weight: 400;
+}
+
+.final-signature {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  color: var(--text-main);
+  margin-top: 1rem;
+}
+
+.always-tag {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-top: 0.2rem;
+}
+
+.heart-icon-animated {
+  font-size: 1.5rem;
+  animation: pulse 2s infinite;
+  margin-bottom: 0.5rem;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* Utility Animations */
+.fade-in {
+  animation: fadeIn 0.8s var(--ease-cinematic) forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY & RESPONSIVENESS
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .serif-title { font-size: 1.8rem; }
+  .story-text { font-size: 0.95rem; }
+  .glass-card { padding: 1.8rem 1.3rem; }
+  .btn { width: 100%; padding: 0.8rem 1rem; }
+}
