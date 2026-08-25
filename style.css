@@ -2,7 +2,6 @@
    RESET & SYSTEM VARIABLES
    ========================================================================== */
 :root {
-  /* Color Palette - Atmosphere progression */
   --bg-dark: #090a10;
   --bg-muted: #131521;
   --accent-cool: #6c5ce7;
@@ -11,16 +10,14 @@
   
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
-  --text-highlight: #ff7675;
+  --text-highlight: #fd79a8;
 
   --card-bg: rgba(22, 25, 41, 0.75);
   --card-border: rgba(255, 255, 255, 0.08);
 
-  /* Fonts */
   --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
 
-  /* Transitions */
   --transition-speed: 0.8s;
   --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -44,9 +41,6 @@ html, body {
   line-height: 1.6;
 }
 
-/* ==========================================================================
-   BACKGROUND & AMBIENT EFFECTS
-   ========================================================================== */
 #ambient-container {
   position: fixed;
   top: 0;
@@ -70,9 +64,8 @@ html, body {
   transition: background var(--transition-speed) ease;
 }
 
-/* Warm atmosphere modifier */
 body.warm-mode .bg-glow {
-  background: radial-gradient(circle, rgba(253, 121, 168, 0.2) 0%, rgba(19, 15, 28, 0.95) 75%);
+  background: radial-gradient(circle, rgba(253, 121, 168, 0.25) 0%, rgba(19, 15, 28, 0.95) 75%);
 }
 
 #particles-layer, #rain-layer {
@@ -109,9 +102,6 @@ body.warm-mode .bg-glow {
   100% { transform: translateY(-80px) scale(1.2); opacity: 0; }
 }
 
-/* ==========================================================================
-   LAYOUT & VIEWPORT
-   ========================================================================== */
 .app-viewport {
   position: relative;
   width: 100%;
@@ -123,7 +113,6 @@ body.warm-mode .bg-glow {
   padding: 1rem;
 }
 
-/* Scene Container System */
 .scene {
   position: absolute;
   width: 100%;
@@ -148,9 +137,7 @@ body.warm-mode .bg-glow {
   transform: translateY(0) scale(1);
 }
 
-/* ==========================================================================
-   SVG CHARACTER STAGE
-   ========================================================================== */
+/* SVG STAGE & ANIMATIONS */
 .character-stage {
   position: absolute;
   top: 10%;
@@ -173,7 +160,6 @@ body.warm-mode .bg-glow {
   overflow: visible;
 }
 
-/* SVG Animations */
 .breath-animation {
   animation: breath 4s ease-in-out infinite alternate;
   transform-origin: center bottom;
@@ -184,14 +170,23 @@ body.warm-mode .bg-glow {
   100% { transform: translateY(-3px); }
 }
 
+/* BOY COMFORT STROKING REACTION ANIMATION */
+.boy-comfort-stroke {
+  animation: comfortPat 2.5s ease-in-out infinite alternate;
+  transform-origin: 75px 95px;
+}
+
+@keyframes comfortPat {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(-3deg) translateY(-2px); }
+  100% { transform: rotate(2deg) translateY(1px); }
+}
+
 .hidden-element {
   display: none !important;
   opacity: 0;
 }
 
-/* ==========================================================================
-   TEXT CARDS & UI COMPONENTS
-   ========================================================================== */
 .content-box {
   position: absolute;
   bottom: 5%;
@@ -221,7 +216,6 @@ body.warm-mode .bg-glow {
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
 }
 
-/* Typography Styles */
 .serif-title {
   font-family: var(--font-serif);
   font-size: 2.2rem;
@@ -260,7 +254,6 @@ body.warm-mode .bg-glow {
   margin-bottom: 1rem;
 }
 
-/* Speech Bubbles */
 .speech-bubble {
   display: inline-block;
   background: rgba(255, 255, 255, 0.1);
@@ -271,7 +264,6 @@ body.warm-mode .bg-glow {
   margin-bottom: 0.8rem;
 }
 
-/* Floating Problem Tag Bubbles */
 #thoughts-container {
   position: absolute;
   width: 100%;
@@ -296,7 +288,6 @@ body.warm-mode .bg-glow {
   100% { transform: translateY(-15px) scale(1); opacity: 0.8; }
 }
 
-/* Dialogue Flow */
 .dialogue-flow {
   min-height: 100px;
   display: flex;
@@ -318,9 +309,8 @@ body.warm-mode .bg-glow {
 }
 
 .dialogue-line.boy { color: #a29bfe; }
-.dialogue-line.girl { color: #ffeaa7; }
+.dialogue-line.girl { color: #fd79a8; }
 
-/* Buttons & Controls */
 .controls {
   margin-top: 1.2rem;
   display: flex;
@@ -347,14 +337,14 @@ body.warm-mode .bg-glow {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+  background: linear-gradient(135deg, #fd79a8, #6c5ce7);
   color: #fff;
-  box-shadow: 0 8px 20px rgba(108, 92, 231, 0.35);
+  box-shadow: 0 8px 20px rgba(253, 121, 168, 0.35);
 }
 
 .btn-primary:hover, .btn-primary:active {
   transform: translateY(-2px);
-  box-shadow: 0 12px 25px rgba(108, 92, 231, 0.5);
+  box-shadow: 0 12px 25px rgba(253, 121, 168, 0.5);
 }
 
 .btn-secondary {
@@ -374,9 +364,6 @@ body.warm-mode .bg-glow {
   border: 1px solid var(--card-border);
 }
 
-/* ==========================================================================
-   FINAL CARD STYLING
-   ========================================================================== */
 .final-letter {
   max-width: 440px;
   padding: 2.5rem 2rem;
@@ -422,7 +409,6 @@ body.warm-mode .bg-glow {
   100% { transform: scale(1); }
 }
 
-/* Utility Animations */
 .fade-in {
   animation: fadeIn 0.8s var(--ease-cinematic) forwards;
 }
@@ -432,20 +418,9 @@ body.warm-mode .bg-glow {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ==========================================================================
-   ACCESSIBILITY & RESPONSIVENESS
-   ========================================================================== */
-@media (prefers-reduced-motion: reduce) {
-  *, ::before, ::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
 @media (max-width: 480px) {
   .serif-title { font-size: 1.8rem; }
   .story-text { font-size: 0.95rem; }
   .glass-card { padding: 1.8rem 1.3rem; }
   .btn { width: 100%; padding: 0.8rem 1rem; }
-}
+   }
